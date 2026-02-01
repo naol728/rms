@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
     if (error) return { success: false, error: error.message };
 
     // DO NOT fetch here — let the listener handle it
-    return { success: true };
+    return { success: true, data };
   };
 
   // ----------------------

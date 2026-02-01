@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContextSimple";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,7 @@ const Login = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, profile } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -51,6 +51,7 @@ const Login = () => {
 
     setLoading(false);
   };
+  useEffect(() => {}, [login]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 p-4">
