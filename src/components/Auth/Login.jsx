@@ -21,6 +21,7 @@ const Login = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const { login, profile } = useAuth();
   const navigate = useNavigate();
 
@@ -38,20 +39,23 @@ const Login = () => {
 
     const result = await login(formData.email, formData.password);
 
-    if (result.success) {
-      // Redirect based on role
-      if (formData.email === "admin@restaurant.com") {
-        navigate("/admin");
-      } else {
-        navigate("/menu");
-      }
-    } else {
-      setError(result.error || "Login failed");
+    if (!result?.success) {
+      setError(result?.error || "Login failed");
+      setLoading(false);
     }
-
-    setLoading(false);
   };
-  useEffect(() => {}, [login]);
+
+  useEffect(() => {
+    if (!profile) return;
+
+    const role = profile?.role;
+
+    if (role === "admin") {
+      navigate("/admin", { replace: true });
+    } else {
+      navigate("/menu", { replace: true });
+    }
+  }, [profile, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 p-4">
@@ -65,6 +69,7 @@ const Login = () => {
           </CardTitle>
           <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (

@@ -71,10 +71,16 @@ export const AuthProvider = ({ children }) => {
       password,
     });
 
+    const { data: userdata, error: userfetcherr } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", data.user.id);
+
     if (error) return { success: false, error: error.message };
+    if (userfetcherr) return { success: false, error: "can not find user " };
 
     // DO NOT fetch here — let the listener handle it
-    return { success: true, data };
+    return { success: true, data, userdata };
   };
 
   // ----------------------
